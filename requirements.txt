@@ -1,2 +1,12 @@
 discord.py
 asyncio
+os
+shutil
+os.path
+linecache
+youtube_dl
+datetime
+urllib
+requests
+BeautifulSoup
+commands
