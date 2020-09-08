@@ -18,7 +18,6 @@ from discord.utils import get
 from discord.ext import commands
 
 client = commands.Bot(command_prefix='==')
-token = ('NzQ0NDQxMjk0NDgyMzA5MTcy.XzjQ-w.384UonF6Cvn9fHwItEeggX6vKEk')
 
 def create_soup(url, headers):
     res = requests.get(url, headers=headers)
