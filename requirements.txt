@@ -1,6 +1,5 @@
 discord.py
 asyncio
-os
 shutil
 os.path
 linecache
