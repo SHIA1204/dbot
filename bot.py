@@ -407,4 +407,4 @@ async def skip(ctx):
         await ctx.send("No music playing failed")
 
 
-client.run(token)
+client.run(os.environ['token'])
