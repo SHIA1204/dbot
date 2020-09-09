@@ -55,7 +55,7 @@ def init():
 	command = []
 	fc = []
 
-	command_inidata = open('C:/DiscordKyaruBot/command.ini', 'r', encoding = 'utf-8')
+	command_inidata = open('command.ini', 'r', encoding = 'utf-8')
 	command_inputData = command_inidata.readlines()
 
 	############## 뮤직봇 명령어 리스트 #####################
