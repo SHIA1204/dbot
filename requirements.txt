@@ -5,4 +5,4 @@ discord
 discord.py[voice]
 youtube_dl==2020.7.28
 gtts
-BeautifulSoup
+BeautifulSoup4
