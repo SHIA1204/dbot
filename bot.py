@@ -781,6 +781,12 @@ async def weather(ctx, arg1):
 
     await ctx.channel.send((rotate) + f'\n오늘의 날씨 ``' + (cast) + f'``\n__기온__ ``현재 {curr_temp}({sen_temp}) 최저 {min_temp} 최고 {max_temp}``\n__강수__ ``오전 {morning_rain_rate}`` ``오후 {afternoon_rain_rate}``\n__대기__ ``미세먼지 {pm10}`` ``초미세먼지 {pm25})``\n\n내일의 날씨\n__기온__ ``최저 {to_min_temp}˚`` ``최고 {to_max_temp}˚``\n__강수__ ``오전 {to_morning_rain_rate}`` ``오후 {to_afternoon_rain_rate}``')
 
+@client.command(pass_context = True, aliases=['==말해'])
+async def tell(ctx, *, arg):
+    tell = str(arg)
+    await ctx.channel.purge(limit=1)
+    await ctx.channel.send(tell)
+
 @client.command(pass_context = True, aliases=['==T정보', '==TS', '==t정보', '==ts'])
 async def tmp_server_status(ctx):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
