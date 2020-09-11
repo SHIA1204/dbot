@@ -681,28 +681,90 @@ async def on_command_error(ctx, error):
 
 @client.command(pass_context = True, aliases=['==명령어'])
 async def cmd(ctx):
-    embed = discord.Embed(title = "캬루봇 명령어 목록", colour = 0x2EFEF7)
-    embed.add_field(name = '==지우기 <숫자>', value = '최근 1~99개의 메세지를 삭제합니다.', inline = False)
-    embed.add_field(name = '==내정보', value = '자신의 디스코드 정보를 보여줍니다.', inline = False)
-    embed.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
-    embed.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
-    embed.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
-    embed.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
-    embed.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
-    embed.add_field(name = '==들어와', value = '봇이 음성 통화방에 들어옵니다.', inline = False)
-    embed.add_field(name = '==나가', value = '봇이 음성 통화방에서 나갑니다.', inline = False)
-    embed.add_field(name = '==재생', value = '봇이 음악을 재생합니다.', inline = False)
-    embed.add_field(name = '==일시정지', value = '현재 재생 중인 음악을 일시 정지합니다.', inline = False)
-    embed.add_field(name = '==다시재생', value = '일시 정지한 음악을 다시 재생합니다.', inline = False)
-    embed.add_field(name = '==스킵', value = '현재 재생 중인 음악을 스킵합니다.', inline = False)
-    embed.add_field(name = '==목록', value = '재생 목록을 보여줍니다.', inline = False)
-    embed.add_field(name = '==현재재생', value = '현재 재생 중인 음악을 보여줍니다.', inline = False)
-    embed.add_field(name = '==볼륨', value = '봇의 볼륨을 조절합니다.', inline = False)
-    embed.add_field(name = '==정지', value = '현재 재생 중인 음악을 정지합니다.', inline = False)
-    embed.add_field(name = '==삭제 <트랙 번호>', value = '재생 목록에 있는 특정 음악을 삭제합니다.', inline = False)
-    embed.add_field(name = '==섞기', value = '재생 목록을 섞습니다.', inline = False)
-    embed.add_field(name = '==반복', value = '현재 재생 중인 음악을 반복 재생합니다.', inline = False)
-    await ctx.channel.send(embed = embed)
+    await ctx.channel.purge(limit=1)
+    emoji_list : list = ["🅰️", "1️⃣", "2️⃣", "3️⃣", "🚫"]
+
+    embed = discord.Embed(title = "캬루봇 명령어 목록", colour = 0x30e08b)
+    embed.add_field(name = ':a: 전체', value = '전체 명령어 보기', inline = False)
+    embed.add_field(name = ':one: 일반', value = '일반 명령어 보기', inline = False)
+    embed.add_field(name = ':two: TruckersMP', value = 'TruckersMP 관련 명령어 보기', inline = False)
+    embed.add_field(name = ':three: 음악', value = '음악 재생 관련 명령어 보기', inline = False)
+    embed.add_field(name = ':no_entry_sign: 취소', value = '실행 취소', inline = False)
+    cmd_message = await ctx.send(embed = embed)
+    for emoji in emoji_list:
+        await cmd_message.add_reaction(emoji)
+
+    def reaction_check(reaction, user):
+        return (reaction.message.id == cmd_message.id) and (user.id == ctx.author.id) and (str(reaction) in emoji_list)
+    try:
+        reaction, user = await client.wait_for('reaction_add', check = reaction_check, timeout = 10)
+    except asyncio.TimeoutError:
+        reaction = "🚫"
+
+    for emoji in emoji_list:
+#        await cmd_message.remove_reaction(emoji, client.user)
+        await cmd_message.delete(delay = 0)
+
+    await cmd_message.delete(delay = 10)
+			
+    if str(reaction) == "1️⃣":
+        embed1 = discord.Embed(title = "캬루봇 명령어 목록 [일반 명령어]", colour = 0x30e08b)
+        embed1.add_field(name = '==지우기 <숫자>', value = '최근 1~99개의 메세지를 삭제합니다.', inline = False)
+        embed1.add_field(name = '==내정보', value = '자신의 디스코드 정보를 보여줍니다.', inline = False)
+        embed1.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
+        embed1.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
+        embed1.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
+        await ctx.channel.send(embed = embed1)
+    elif str(reaction) == "2️⃣":
+        embed2 = discord.Embed(title = "캬루봇 명령어 목록 [TruckersMP]", colour = 0x30e08b)
+        embed2.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
+        embed2.add_field(name = '==T프로필 <TMPID>, ==tp', value = '해당 TMPID 아이디를 가진 사람의 프로필을 보여줍니다.', inline = False)
+        embed2.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
+        await ctx.channel.send(embed = embed2)
+    elif str(reaction) == "3️⃣":
+        embed3 = discord.Embed(title = "캬루봇 명령어 목록 [음악 재생]", colour = 0x30e08b)
+        embed3.add_field(name = '==들어와', value = '봇이 음성 통화방에 들어옵니다.', inline = False)
+        embed3.add_field(name = '==나가', value = '봇이 음성 통화방에서 나갑니다.', inline = False)
+        embed3.add_field(name = '==재생', value = '봇이 음악을 재생합니다.', inline = False)
+        embed3.add_field(name = '==일시정지', value = '현재 재생 중인 음악을 일시 정지합니다.', inline = False)
+        embed3.add_field(name = '==다시재생', value = '일시 정지한 음악을 다시 재생합니다.', inline = False)
+        embed3.add_field(name = '==스킵', value = '현재 재생 중인 음악을 스킵합니다.', inline = False)
+        embed3.add_field(name = '==목록', value = '재생 목록을 보여줍니다.', inline = False)
+        embed3.add_field(name = '==현재재생', value = '현재 재생 중인 음악을 보여줍니다.', inline = False)
+        embed3.add_field(name = '==볼륨', value = '봇의 볼륨을 조절합니다.', inline = False)
+        embed3.add_field(name = '==정지', value = '현재 재생 중인 음악을 정지합니다.', inline = False)
+        embed3.add_field(name = '==삭제 <트랙 번호>', value = '재생 목록에 있는 특정 음악을 삭제합니다.', inline = False)
+        embed3.add_field(name = '==섞기', value = '재생 목록을 섞습니다.', inline = False)
+        embed3.add_field(name = '==반복', value = '현재 재생 중인 음악을 반복 재생합니다.', inline = False)
+        await ctx.channel.send(embed = embed3)
+    elif str(reaction) == "🅰️":
+        embed6 = discord.Embed(title = "캬루봇 명령어 목록 [전체 명령어]", colour = 0x30e08b)
+        embed6.add_field(name = '==지우기 <숫자>', value = '최근 1~99개의 메세지를 삭제합니다.', inline = False)
+        embed6.add_field(name = '==내정보', value = '자신의 디스코드 정보를 보여줍니다.', inline = False)
+        embed6.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
+        embed6.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
+        embed6.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
+        embed6.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
+        embed6.add_field(name = '==T프로필 <TMPID>, ==tp', value = '해당 TMPID 아이디를 가진 사람의 프로필을 보여줍니다.', inline = False)
+        embed6.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
+        embed6.add_field(name = '==들어와', value = '봇이 음성 통화방에 들어옵니다.', inline = False)
+        embed6.add_field(name = '==나가', value = '봇이 음성 통화방에서 나갑니다.', inline = False)
+        embed6.add_field(name = '==재생', value = '봇이 음악을 재생합니다.', inline = False)
+        embed6.add_field(name = '==일시정지', value = '현재 재생 중인 음악을 일시 정지합니다.', inline = False)
+        embed6.add_field(name = '==다시재생', value = '일시 정지한 음악을 다시 재생합니다.', inline = False)
+        embed6.add_field(name = '==스킵', value = '현재 재생 중인 음악을 스킵합니다.', inline = False)
+        embed6.add_field(name = '==목록', value = '재생 목록을 보여줍니다.', inline = False)
+        embed6.add_field(name = '==현재재생', value = '현재 재생 중인 음악을 보여줍니다.', inline = False)
+        embed6.add_field(name = '==볼륨', value = '봇의 볼륨을 조절합니다.', inline = False)
+        embed6.add_field(name = '==정지', value = '현재 재생 중인 음악을 정지합니다.', inline = False)
+        embed6.add_field(name = '==삭제 <트랙 번호>', value = '재생 목록에 있는 특정 음악을 삭제합니다.', inline = False)
+        embed6.add_field(name = '==섞기', value = '재생 목록을 섞습니다.', inline = False)
+        embed6.add_field(name = '==반복', value = '현재 재생 중인 음악을 반복 재생합니다.', inline = False)
+        await ctx.channel.send(embed = embed6)
+    elif str(reaction) == "🚫":
+        await cmd_message.delete(delay = 0)
+    else:
+        return False
 
 @client.command(pass_context = True, aliases=['==지우기'])
 @commands.has_permissions(administrator=True)
