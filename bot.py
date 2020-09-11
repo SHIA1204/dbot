@@ -686,6 +686,7 @@ async def cmd(ctx):
     embed.add_field(name = '==내정보', value = '자신의 디스코드 정보를 보여줍니다.', inline = False)
     embed.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
     embed.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
+    embed.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
     embed.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
     embed.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
     embed.add_field(name = '==들어와', value = '봇이 음성 통화방에 들어옵니다.', inline = False)
