@@ -7,3 +7,4 @@ gtts
 BeautifulSoup4
 requests
 lxml
+selenium
