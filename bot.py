@@ -793,7 +793,7 @@ async def search_youtube(ctx, *, arg):
     arg_title = str(arg)
     arg = str(arg).replace(" ", "%20")
     
-    browser = webdriver.Chrome('C:/DiscordKyaruBot/테스트/chromedriver.exe')
+    browser = webdriver.Chrome('chromedriver.exe')
     browser.maximize_window()
 
     url = f"https://www.youtube.com/results?search_query={arg}"
