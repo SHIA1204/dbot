@@ -837,91 +837,44 @@ async def tmp_traffic(ctx):
     embed.add_field(name = f'{rank5}', value = f"\n{g_player} players tracked / {g_time} in-game time", inline = False)
     await ctx.channel.send(embed = embed)
 
-@client.command(pass_context = True, aliases=['==유튜브'])
-async def search_youtube(ctx, *, arg):
-    arg_title = str(arg)
-    arg = str(arg).replace(" ", "%20")
+@client.command(pass_context = True, aliases=['==T프로필', '==TP', '==t프로필', '==tp'])
+async def tmp_user_profile(ctx, arg):
+    headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
+    url = f"https://truckersmp.com/user/{arg}"
+    soup = create_soup(url, headers)
+    #플레이어 정보
+    user_status = soup.find("div", attrs={"class":"profile-bio"})
+    name = user_status.find_all("span")[0].get_text().strip()
+    check = user_status.find_all("strong")[0].get_text()
+    if check == "Also known as":
+        steam = user_status.find_all("span")[3].get_text().strip().replace("Steam ID:", "")
+        birt = user_status.find_all("span")[5].get_text().strip().replace("Member since:", "")
+        bans = user_status.find_all("span")[6].get_text().strip().replace("Active bans:", "")
+    else:
+        steam = user_status.find_all("span")[2].get_text().strip().replace("Steam ID:", "")
+        birt = user_status.find_all("span")[4].get_text().strip().replace("Member since:", "")
+        bans = user_status.find_all("span")[5].get_text().strip().replace("Active bans:", "")
 
-    options = webdriver.ChromeOptions()
-    options.headless = True
-    options.add_argument("window-size=1920x1080")
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36")
+    vtc_check = soup.find_all("h2", attrs={"class":"panel-title heading-sm pull-left"})[2].get_text()
+    if vtc_check == " VTC":
+        vtc_find = soup.find_all("div", attrs={"class":"panel panel-profile"})[2]
+        vtc_name =  vtc_find.find("h5", attrs={"class":"text-center break-all"}).get_text().strip()
+    else:
+        vtc_name = "없음"
 
-    browser = webdriver.Chrome("dbot/chromedriver.exe", options=options)
-    browser.maximize_window()
+    #프로필 이미지
+    img = soup.find_all("div", attrs={"class": "col-md-3 md-margin-bottom-40"})[0]
+    imgs = img.find("img", attrs={"class": "img-responsive profile-img margin-bottom-20 shadow-effect-1"})
+    prof_image = imgs.get("src")
 
-    url = f"https://www.youtube.com/results?search_query={arg}"
-#    headers = {
-#        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36",
-#        "Accept-Language":"ko-KR,ko"
-#        }
-    #페이지 이동
-    browser.get(url)
-
-    #지정한 위치로 스크롤 내리기
-    #browser.execute_script("Window.scrollTo(0, 1080)") # 1920 x 1080
-    #browser.execute_script("Window.scrollTo(0, 2080)")
-
-    #화면 가장 아래로 스크롤 내리기
-    #browser.execute_script("Window.scrollTo(0, document.body.scrollHeight)")
-
-    # interval = 0.01 # ?초에 한 번씩 스크롤 내림
-
-    # #현재 문서 높이를 가져와서 저장
-    # prev_height = browser.execute_script("return document.body.scrollHeight")
-
-    # #반복
-    # while True:
-    #     #스크롤 가장 아래로 내림
-    #     browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-    #     #페이지 로딩 대기
-    #     time.sleep(interval)
-
-    #     #현재 문서 높이를 가져와서 저장
-    #     curr_height = browser.execute_script("return document.body.scrollHeight")
-    #     if curr_height == prev_height:
-    #         break
-
-    #     prev_height == curr_height
-    
-    # print("스크롤 완료")
-    browser.get_screenshot_as_file("chrome.png")
-
-    soup = BeautifulSoup(browser.page_source, 'lxml')
-
-    #제목 검색
-    title_one = soup.find_all("h3", attrs={"class":"title-and-badge style-scope ytd-video-renderer"})[0].get_text().strip()
-    title_two = soup.find_all("h3", attrs={"class":"title-and-badge style-scope ytd-video-renderer"})[1].get_text().strip()
-    title_three = soup.find_all("h3", attrs={"class":"title-and-badge style-scope ytd-video-renderer"})[2].get_text().strip()
-    title_four = soup.find_all("h3", attrs={"class":"title-and-badge style-scope ytd-video-renderer"})[3].get_text().strip()
-    title_five = soup.find_all("h3", attrs={"class":"title-and-badge style-scope ytd-video-renderer"})[4].get_text().strip()
-    #url 탐색
-    glink_one = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[0]
-    link_one = "https://www.youtube.com/" + glink_one.get("href")
-    glink_two = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[1]
-    link_two = "https://www.youtube.com/" + glink_two.get("href")
-    glink_three = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[2]
-    link_three = "https://www.youtube.com/" + glink_three.get("href")
-    glink_four = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[3]
-    link_four = "https://www.youtube.com/" + glink_four.get("href")
-    glink_five = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[4]
-    link_five = "https://www.youtube.com/" + glink_five.get("href")
-    #첫번째 이미지 불러오기
-    glink_one = soup.find_all("a", attrs={"class": "yt-simple-endpoint inline-block style-scope ytd-thumbnail"})[0]
-    img = glink_one.find("img", attrs={"class": "style-scope yt-img-shadow"})
-    top_image = img.get("src")
-    #검색 결과 출력
-    embed = discord.Embed(title = f":movie_camera: {arg_title} 검색 결과", colour = 0x2EFEF7)
-    embed.set_author(name = '더보기', url = url)
-    embed.add_field(name = f'1. {title_one}', value = f'└ {link_one}', inline = False)
-    embed.add_field(name = f'2. {title_two}', value = f'└ {link_two}', inline = False)
-    embed.add_field(name = f'3. {title_three}', value = f'└ {link_three}', inline = False)
-    embed.add_field(name = f'4. {title_four}', value = f'└ {link_four}', inline = False)
-    embed.add_field(name = f'5. {title_five}', value = f'└ {link_five}', inline = False)
-    embed.set_thumbnail(url=top_image)
+    embed = discord.Embed(title = f"[TruckersMP] {arg}'s 프로필", colour = 0x2EFEF7)
+    embed.add_field(name = 'Name', value = f"{name}", inline = False)
+    embed.add_field(name = 'Steam ID', value = f"{steam}", inline = False)
+    embed.add_field(name = 'Member since', value = f"{birt}", inline = False)
+    embed.add_field(name = 'Active bans', value = f"{bans}", inline = False)
+    embed.add_field(name = 'VTC', value = f"{vtc_name}", inline = False)
+    embed.set_thumbnail(url=prof_image)
     await ctx.channel.send(embed = embed)
-
-    browser.quit()
 
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
