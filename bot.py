@@ -717,7 +717,7 @@ async def cmd_cmd_abc(ctx):
         await ctx.channel.send(embed = embed1)
     elif str(reaction) == "2️⃣":
         embed2 = discord.Embed(title = "캬루봇 명령어 목록 [TruckersMP]", colour = 0x30e08b)
-        embed2.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
+        embed2.add_field(name = '==T정보, ==ts', value = 'TruckersMP의  정보를 보여줍니다.', inline = False)
         embed2.add_field(name = '==T프로필 <TMPID>, ==tp', value = '해당 TMPID 아이디를 가진 사람의 프로필을 보여줍니다.', inline = False)
         embed2.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
         await ctx.channel.send(embed = embed2)
@@ -882,7 +882,7 @@ async def tmp_tmp_abc_server_status(ctx):
     embed = discord.Embed(title = "[ETS2] TruckersMP 서버 현황", colour = 0x2EFEF7)
     embed.add_field(name = f'`[{sim1_sta}]` Simulation 1', value = f"{sim1}", inline = False)
     embed.add_field(name = f'`[{sim2_sta}]` Simulation 2', value = f"{sim2}", inline = False)
-    embed.add_field(name = f'`[{sim_us_sta}]` [US] Simulation`', value = f"{sim_us}", inline = False)
+    embed.add_field(name = f'`[{sim_us_sta}]` [US] Simulation', value = f"{sim_us}", inline = False)
     embed.add_field(name = f'`[{sim_sgp_sta}]` [SGP] Simulation', value = f"{sim_sgp}", inline = False)
     embed.add_field(name = f'`[{arc_sta}]` Arcade', value = f"{arc}", inline = False)
     embed.add_field(name = f'`[{pro_sta}]` ProMods', value = f"{pro}", inline = False)
