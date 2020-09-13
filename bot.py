@@ -680,7 +680,7 @@ async def on_command_error(ctx, error):
 	raise error
 
 @client.command(pass_context = True, aliases=['==명령어'])
-async def cmd(ctx):
+async def cmd_cmd_abc(ctx):
     await ctx.channel.purge(limit=1)
     emoji_list : list = ["🅰️", "1️⃣", "2️⃣", "3️⃣", "🚫"]
 
@@ -768,7 +768,7 @@ async def cmd(ctx):
 
 @client.command(pass_context = True, aliases=['==지우기'])
 @commands.has_permissions(administrator=True)
-async def clear(ctx, amount):
+async def claer_clear_abc(ctx, amount):
     amount = int(amount)
     if amount < 100:
         await ctx.channel.purge(limit=amount)
@@ -778,11 +778,11 @@ async def clear(ctx, amount):
         await ctx.channel.send(embed=discord.Embed(title=f":no_entry_sign: 숫자를 99 이하로 입력해 주세요.",colour = 0x2EFEF7)) 
 
 @client.command(aliases=['==핑'])
-async def ping(ctx):
+async def ping_ping_abc(ctx):
     await ctx.channel.send('퐁! `{}ms`'.format(round(client.latency * 1000)))
 
 @client.command(pass_context = True, aliases=['==내정보'])
-async def myprofile(ctx):
+async def my_my_abc_profile(ctx):
     date = datetime.datetime.utcfromtimestamp(((int(ctx.author.id) >> 22) + 1420070400000) / 1000)
     embed = discord.Embed(title = ctx.author.display_name + "님의 정보", colour = 0x2EFEF7)
     embed.add_field(name = '사용자명', value = ctx.author.name, inline = False)
@@ -792,14 +792,14 @@ async def myprofile(ctx):
     await ctx.channel.send(embed = embed)
 
 @client.command(pass_context = True, aliases=['==카페'])
-async def cafe(ctx):
+async def cafe_cafe_abc(ctx):
     embed = discord.Embed(title = "KCTG 공식 카페", colour = 0x2EFEF7)
     embed.add_field(name = 'https://cafe.naver.com/kctgofficial', value = "\n\u200b", inline = False)
     embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/740877681209507880/744451389396353106/KCTG_Wolf_1.png")
     await ctx.channel.send(embed = embed)
 
 @client.command(pass_context = True, aliases=['==실검'])
-async def search_rank(ctx):
+async def search_search_abc_rank(ctx):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
     url = "https://datalab.naver.com/keyword/realtimeList.naver?where=main"
     soup = create_soup(url, headers)
@@ -818,7 +818,7 @@ async def search_rank(ctx):
     await ctx.channel.send(f'Ⅰ ``{one}``\nⅡ ``{two}``\nⅢ ``{three}``\nⅣ ``{four}``\nⅤ ``{five}``\nⅥ ``{six}``\nⅦ ``{seven}``\nⅧ ``{eight}``\nⅨ ``{nine}``\nⅩ ``{ten}``\n\n``Time[{time}]``')
 
 @client.command(pass_context = True, aliases=['==날씨'])
-async def weather(ctx, arg1):
+async def weather_weather_abc(ctx, arg1):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
     url = f"https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query={arg1}+날씨&oquery=날씨&tqi=U1NQ%2FsprvmsssUNA1MVssssssPN-224813"
     soup = create_soup(url, headers)
@@ -849,7 +849,7 @@ async def weather(ctx, arg1):
     await ctx.channel.send((rotate) + f'\n오늘의 날씨 ``' + (cast) + f'``\n__기온__ ``현재 {curr_temp}({sen_temp}) 최저 {min_temp} 최고 {max_temp}``\n__강수__ ``오전 {morning_rain_rate}`` ``오후 {afternoon_rain_rate}``\n__대기__ ``미세먼지 {pm10}`` ``초미세먼지 {pm25})``\n\n내일의 날씨\n__기온__ ``최저 {to_min_temp}˚`` ``최고 {to_max_temp}˚``\n__강수__ ``오전 {to_morning_rain_rate}`` ``오후 {to_afternoon_rain_rate}``')
 
 @client.command(pass_context = True, aliases=['==말해'])
-async def tell(ctx, *, arg):
+async def tell_tell_abc(ctx, *, arg):
     tell = str(arg)
     await ctx.channel.purge(limit=1)
     await ctx.channel.send(tell)
@@ -891,7 +891,7 @@ async def tmp_tmp_abc_server_status(ctx):
     await ctx.channel.send(embed = embed)
 
 @client.command(pass_context = True, aliases=['==T트래픽순위', '==TTR', '==t트래픽순위', '==ttr'])
-async def tmp_traffic(ctx):
+async def tmp_tmp_abc_traffic(ctx):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
     url = "https://traffic.krashnz.com/"
     soup = create_soup(url, headers)
@@ -915,7 +915,7 @@ async def tmp_traffic(ctx):
     await ctx.channel.send(embed = embed)
 
 @client.command(pass_context = True, aliases=['==T프로필', '==TP', '==t프로필', '==tp'])
-async def tmp_user_profile(ctx, arg):
+async def tmp_tmp_abc_user_profile(ctx, arg):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
     url = f"https://truckersmp.com/user/{arg}"
     soup = create_soup(url, headers)
