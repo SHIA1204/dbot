@@ -854,8 +854,7 @@ async def tell(ctx, *, arg):
     await ctx.channel.purge(limit=1)
     await ctx.channel.send(tell)
 
-@client.command(pass_context = True, aliases=['==ttt'])
-#@client.command(pass_context = True, aliases=['==T정보', '==TS', '==t정보', '==ts'])
+@client.command(pass_context = True, aliases=['==T정보', '==TS', '==t정보', '==ts'])
 async def tmp_tmp_abc_server_status(ctx):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
     url = "https://stats.truckersmp.com/"
@@ -880,7 +879,7 @@ async def tmp_tmp_abc_server_status(ctx):
     #서버 시간
     curr_game_time = soup.find("span", attrs={"id":"game_time"}).get_text().strip()
 
-    embed = discord.Embed(title = "[ETS2] TruckersMP 접속자 현황", colour = 0x2EFEF7)
+    embed = discord.Embed(title = "[ETS2] TruckersMP 서버 현황", colour = 0x2EFEF7)
     embed.add_field(name = f'`[{sim1_sta}]` Simulation 1', value = f"{sim1}", inline = False)
     embed.add_field(name = f'`[{sim2_sta}]` Simulation 2', value = f"{sim2}", inline = False)
     embed.add_field(name = f'`[{sim_us_sta}]` [US] Simulation`', value = f"{sim_us}", inline = False)
