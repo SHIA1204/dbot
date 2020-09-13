@@ -744,7 +744,7 @@ async def cmd(ctx):
         embed6.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
         embed6.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
         embed6.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
-        embed6.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 접속자 정보를 보여줍니다.', inline = False)
+        embed6.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 서버 정보를 보여줍니다.', inline = False)
         embed6.add_field(name = '==T프로필 <TMPID>, ==tp', value = '해당 TMPID 아이디를 가진 사람의 프로필을 보여줍니다.', inline = False)
         embed6.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
         embed6.add_field(name = '==들어와', value = '봇이 음성 통화방에 들어옵니다.', inline = False)
@@ -776,6 +776,10 @@ async def clear(ctx, amount):
     else:
         await ctx.channel.purge(limit=1)
         await ctx.channel.send(embed=discord.Embed(title=f":no_entry_sign: 숫자를 99 이하로 입력해 주세요.",colour = 0x2EFEF7)) 
+
+@client.command(aliases=['==핑'])
+async def ping(ctx):
+    await ctx.channel.send('퐁! `{}ms`'.format(round(client.latency * 1000)))
 
 @client.command(pass_context = True, aliases=['==내정보'])
 async def myprofile(ctx):
@@ -850,29 +854,41 @@ async def tell(ctx, *, arg):
     await ctx.channel.purge(limit=1)
     await ctx.channel.send(tell)
 
-@client.command(pass_context = True, aliases=['==T정보', '==TS', '==t정보', '==ts'])
-async def tmp_server_status(ctx):
+@client.command(pass_context = True, aliases=['==ttt'])
+#@client.command(pass_context = True, aliases=['==T정보', '==TS', '==t정보', '==ts'])
+async def tmp_tmp_abc_server_status(ctx):
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Whale/2.8.105.22 Safari/537.36'}
-    url = "https://truckersmp.com/status"
+    url = "https://stats.truckersmp.com/"
     soup = create_soup(url, headers)
     #현재 접속중인 플레이어
-    curr_status = soup.find("div", attrs={"class":"row margin-bottom-40 margin-top-20"})
-    sim1 = curr_status.find_all("h4")[0].get_text().strip().replace("No players in queue", "")
-    sim2 = curr_status.find_all("h4")[1].get_text().strip().replace("No players in queue", "")
-    sim_us = curr_status.find_all("h4")[2].get_text().strip().replace("No players in queue", "")
-    sim_sgp = curr_status.find_all("h4")[3].get_text().strip().replace("No players in queue", "")
-    arc = curr_status.find_all("h4")[4].get_text().strip().replace("No players in queue", "")
-    pro = curr_status.find_all("h4")[5].get_text().strip().replace("No players in queue", "")
-    pro_arc = curr_status.find_all("h4")[6].get_text().strip().replace("No players in queue", "")
+    curr_status = soup.find("div", attrs={"class":"container-fluid"})
+    sim1 = curr_status.find_all("div", attrs={"class":"server-count"})[0].get_text().strip()
+    sim2 = curr_status.find_all("div", attrs={"class":"server-count"})[1].get_text().strip()
+    sim_us = curr_status.find_all("div", attrs={"class":"server-count"})[2].get_text().strip()
+    sim_sgp = curr_status.find_all("div", attrs={"class":"server-count"})[3].get_text().strip()
+    arc = curr_status.find_all("div", attrs={"class":"server-count"})[4].get_text().strip()
+    pro = curr_status.find_all("div", attrs={"class":"server-count"})[5].get_text().strip()
+    pro_arc = curr_status.find_all("div", attrs={"class":"server-count"})[6].get_text().strip()
+    #서버 온오프 여부
+    sim1_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[0].get_text().strip().replace("LINE", "")
+    sim2_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[1].get_text().strip().replace("LINE", "")
+    sim_us_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[2].get_text().strip().replace("LINE", "")
+    sim_sgp_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[3].get_text().strip().replace("LINE", "")
+    arc_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[4].get_text().strip().replace("LINE", "")
+    pro_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[5].get_text().strip().replace("LINE", "")
+    pro_arc_sta = curr_status.find_all("div", attrs={"class":"server-status ONLINE"})[6].get_text().strip().replace("LINE", "")
+    #서버 시간
+    curr_game_time = soup.find("span", attrs={"id":"game_time"}).get_text().strip()
 
     embed = discord.Embed(title = "[ETS2] TruckersMP 접속자 현황", colour = 0x2EFEF7)
-    embed.add_field(name = 'Simulation 1', value = f"{sim1}", inline = False)
-    embed.add_field(name = 'Simulation 2', value = f"{sim2}", inline = False)
-    embed.add_field(name = '[US] Simulation`', value = f"{sim_us}", inline = False)
-    embed.add_field(name = '[SGP] Simulation', value = f"{sim_sgp}", inline = False)
-    embed.add_field(name = 'Arcade', value = f"{arc}", inline = False)
-    embed.add_field(name = 'ProMods', value = f"{pro}", inline = False)
-    embed.add_field(name = 'ProMods Arcade', value = f"{pro_arc}", inline = False)
+    embed.add_field(name = f'`[{sim1_sta}]` Simulation 1', value = f"{sim1}", inline = False)
+    embed.add_field(name = f'`[{sim2_sta}]` Simulation 2', value = f"{sim2}", inline = False)
+    embed.add_field(name = f'`[{sim_us_sta}]` [US] Simulation`', value = f"{sim_us}", inline = False)
+    embed.add_field(name = f'`[{sim_sgp_sta}]` [SGP] Simulation', value = f"{sim_sgp}", inline = False)
+    embed.add_field(name = f'`[{arc_sta}]` Arcade', value = f"{arc}", inline = False)
+    embed.add_field(name = f'`[{pro_sta}]` ProMods', value = f"{pro}", inline = False)
+    embed.add_field(name = f'`[{pro_arc_sta}]` ProMods Arcade', value = f"{pro_arc}", inline = False)
+    embed.set_footer(text=f"서버 시간: {curr_game_time}")
     await ctx.channel.send(embed = embed)
 
 @client.command(pass_context = True, aliases=['==T트래픽순위', '==TTR', '==t트래픽순위', '==ttr'])
