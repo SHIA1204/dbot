@@ -772,7 +772,7 @@ async def claer_clear_abc(ctx, amount):
     amount = int(amount)
     if amount < 100:
         await ctx.channel.purge(limit=amount)
-        await ctx.channel.send(embed=discord.Embed(title=f":warning: {amount}개의 채팅을 삭제했어요.",colour = 0x2EFEF7))
+        await ctx.channel.send(embed=discord.Embed(title=f":put_litter_in_its_place: {amount}개의 채팅을 삭제했어요.",colour = 0x2EFEF7))
     else:
         await ctx.channel.purge(limit=1)
         await ctx.channel.send(embed=discord.Embed(title=f":no_entry_sign: 숫자를 99 이하로 입력해 주세요.",colour = 0x2EFEF7)) 
