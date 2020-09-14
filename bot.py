@@ -35,6 +35,16 @@ import time
 import urllib.request
 from gtts import gTTS
 
+from urllib.request import URLError
+from urllib.request import HTTPError
+from urllib.request import urlopen
+from urllib.request import Request, urlopen
+from urllib.parse import quote
+import re
+import warnings
+import unicodedata
+import json
+
 ##################### 로깅 ###########################
 log_stream = StringIO()    
 logging.basicConfig(stream=log_stream, level=logging.WARNING)
@@ -714,6 +724,7 @@ async def cmd_cmd_abc(ctx):
         embed1.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
         embed1.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
         embed1.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
+	embed1.add_field(name = '==번역 <언어> <내용>', value = '<내용>을 번역합니다.', inline = False)
         await ctx.channel.send(embed = embed1)
     elif str(reaction) == "2️⃣":
         embed2 = discord.Embed(title = "캬루봇 명령어 목록 [TruckersMP]", colour = 0x30e08b)
@@ -744,6 +755,7 @@ async def cmd_cmd_abc(ctx):
         embed6.add_field(name = '==실검', value = '네이버의 급상승 검색어 TOP10을 보여줍니다.', inline = False)
         embed6.add_field(name = '==날씨 <지역>', value = '<지역>의 날씨를 알려줍니다.', inline = False)
         embed6.add_field(name = '==말해 <내용>', value = '<내용>을 말합니다.', inline = False)
+	embed1.add_field(name = '==번역 <언어> <내용>', value = '<내용>을 번역합니다.', inline = False)
         embed6.add_field(name = '==T정보, ==ts', value = 'TruckersMP의 서버 정보를 보여줍니다.', inline = False)
         embed6.add_field(name = '==T프로필 <TMPID>, ==tp', value = '해당 TMPID 아이디를 가진 사람의 프로필을 보여줍니다.', inline = False)
         embed6.add_field(name = '==T트래픽순위, ==ttr', value = 'TruckersMP의 트래픽 순위 TOP5를 보여줍니다.', inline = False)
@@ -952,6 +964,76 @@ async def tmp_tmp_abc_user_profile(ctx, arg):
     embed.add_field(name = 'VTC', value = f"{vtc_name}", inline = False)
     embed.set_thumbnail(url=prof_image)
     await ctx.channel.send(embed = embed)
-
+	
+@client.command(aliases=['==번역'])
+async def _translator_abc(ctx, arg, *, content):
+    content = str(content)
+    if arg[0] == '한':
+        langso = "Korean"
+        so = "ko"
+    elif arg[0] == '영':
+        langso = "English"
+        so = "en"
+    elif arg[0] == '일':
+        langso = "Japanese"
+        so = "ja"
+    elif arg[0] == '중':
+        langso = "Chinese"
+        so = "zh-CN"
+    else:
+        pass
+    if arg[1] == '한':
+        langta = "Korean"
+        ta = "ko"
+    elif arg[1] == '영':
+        langta = "English"
+        ta = "en"
+    elif arg[1] == '일':
+        langta = "Japanese"
+        ta = "ja"
+    elif arg[1] == '중':
+        langta = "Chinese"
+        ta = "zh-CN"
+    else:
+        pass
+    url = "https://openapi.naver.com/v1/papago/n2mt"
+    #띄어쓰기 : split처리후 [1:]을 for문으로 붙인다.
+    trsText = str(content)
+    try:
+        if len(trsText) == 1:
+            await ctx.channel.send("단어 혹은 문장을 입력해주세요.")
+        else:
+            trsText = trsText[0:]
+            combineword = ""
+            for word in trsText:
+                combineword += "" + word
+            sourcetext = combineword.strip()
+            combineword = quote(sourcetext)
+            dataParmas = f"source={so}&target={ta}&text=" + combineword
+            request = Request(url)
+            request.add_header("X-Naver-Client-Id", client_id)
+            request.add_header("X-Naver-Client-Secret", client_secret)
+            response = urlopen(request, data=dataParmas.encode("utf-8"))
+            responsedCode = response.getcode()
+            if (responsedCode == 200):
+                response_body = response.read()
+                # response_body -> byte string : decode to utf-8
+                api_callResult = response_body.decode('utf-8')
+                # JSON data will be printed as string type. So need to make it back to type JSON(like dictionary)
+                api_callResult = json.loads(api_callResult)
+                #번역 결과
+                translatedText = api_callResult['message']['result']["translatedText"]
+                embed = discord.Embed(title=f"번역 ┃ {langso} → {langta}", description="", color=0x2e9fff)
+                embed.add_field(name=f"{langso}", value=sourcetext, inline=False)
+                embed.add_field(name=f"{langta}", value=translatedText, inline=False)
+                embed.set_thumbnail(url="https://papago.naver.com/static/img/papago_og.png")
+                embed.set_footer(text="API provided by Naver Open API",
+                                 icon_url='https://papago.naver.com/static/img/papago_og.png')
+                await ctx.channel.send(embed=embed)
+            else:
+                await ctx.channel.send("Error Code : " + responsedCode)
+    except HTTPError as e:
+        await ctx.channel.send("번역 실패. HTTP에러 발생.")
+	
 access_token = os.environ["BOT_TOKEN"]
 client.run(access_token)
