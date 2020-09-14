@@ -669,6 +669,9 @@ class Music(commands.Cog):
 client = commands.Bot('', help_command = None)
 client.add_cog(Music(client))
 
+client_id = "Qn7V6LEqLr_uzZoNLhUH"
+client_secret = "rKQUWr7jaJ"
+
 def create_soup(url, headers):
     res = requests.get(url, headers=headers)
     res.raise_for_status()
